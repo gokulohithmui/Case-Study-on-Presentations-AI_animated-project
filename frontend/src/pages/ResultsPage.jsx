@@ -64,11 +64,14 @@ const stagger = { animate: { transition: { staggerChildren: .08 } } }
 const fadeUp  = { initial: { opacity: 0, y: 18 }, animate: { opacity: 1, y: 0, transition: { duration: .45 } } }
 
 export default function ResultsPage({ result, onReset, onNewAnalysis }) {
-  const hasError  = !!result?.error
-  const report    = result?.final_report || {}
-  const score     = result?.confidence_score ?? report?.confidence ?? 0
+  const hasError = !!result?.error
+
+  // API returns: { report: {...}, confidence: 0.75, iterations: 1 }
+  // report object contains: { diagnosis, confidence, report }
+  const report    = result?.report || result?.final_report || {}
+  const score     = result?.confidence ?? result?.confidence_score ?? report?.confidence ?? 0
   const diagnosis = report?.diagnosis || 'Unable to determine'
-  const reportTxt = report?.report   || 'No detailed report generated.'
+  const reportTxt = report?.report || 'No detailed report generated.'
   const iters     = result?.iterations ?? 1
 
   return (

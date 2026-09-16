@@ -106,8 +106,16 @@ class LLMRouter:
                                 "retry_count": retry_count
                             }
                         )
-                        # Return dummy response object similar to litellm response
-                        return {"choices": [{"message": {"content": "DRY RUN MOCK RESPONSE"}}]}
+                        # Return agent-specific mock responses so downstream agents can parse them
+                        dry_run_responses = {
+                            "Clinical_Text_Clarifier": '{"symptoms": ["headache", "nausea", "photophobia"], "conditions": ["hypertension"]}',
+                            "Symptom_RAG_Analyzer": "Based on the extracted symptoms, candidate diagnoses include Migraine with Aura (strong match: severe unilateral headache, photophobia, nausea), Tension-Type Headache (moderate match), and Hypertensive Crisis (consider given HTN history).",
+                            "Evidence_Based_Scanner": "Clinical guidelines (IHS 2018) support migraine diagnosis when ≥2 of: unilateral, pulsating, moderate-severe intensity, aggravated by activity; PLUS ≥1 of nausea/vomiting or photophobia/phonophobia.",
+                            "Clinical_Data_Fusion": '{"diagnosis": "Migraine with Aura", "confidence": 0.82, "report": "The clinical presentation — severe headache, photophobia, and nausea in a patient with hypertension — is consistent with Migraine with Aura (IHS Grade A evidence). RAG retrieval identified 6 matching PubMed abstracts. KG traversal confirmed headache→photophobia→migraine pathway. Confidence 0.82 — no further iterations required."}',
+                            "Adaptive_Optimizer": "Confidence threshold met. No reformulation needed. Diagnosis is well-supported by all evidence sources."
+                        }
+                        mock_content = dry_run_responses.get(agent_name, f"Mock response for {agent_name}: analysis complete.")
+                        return {"choices": [{"message": {"content": mock_content}}]}
 
                     # Actual API call using LiteLLM
                     response = litellm.completion(
