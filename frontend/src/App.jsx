@@ -24,7 +24,10 @@ export default function App() {
     try {
       const res = await fetch('http://127.0.0.1:8000/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': 'demo-key-123'   // matches CDSS_API_KEY default in backend
+        },
         body: JSON.stringify({ patient_text: text })
       })
       const data = await res.json()
