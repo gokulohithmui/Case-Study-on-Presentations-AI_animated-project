@@ -1,0 +1,29 @@
+# Backend & API
+fastapi
+uvicorn[standard]
+pydantic
+
+# LLM Routing & Orchestration
+litellm
+langgraph
+langchain
+langchain-core
+
+# Data & Knowledge Graph
+neo4j
+chromadb
+
+# Embeddings & NER
+sentence-transformers
+# spacy and scispacy removed for Windows compatibility without C++ tools
+# Model download for scispacy will be handled separately (en_core_sci_sm)
+
+# Web Search & Utilities
+duckduckgo-search
+requests
+python-dotenv
+
+# Testing & Eval
+pytest
+flake8
+datasets # for huggingface datasets MedQA/PubMedQA
